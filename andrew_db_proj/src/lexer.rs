@@ -28,7 +28,7 @@ impl Lexer
         Lexer { tokens: vec![] }
     }
     */
-     
+
 
     pub fn new(t: Vec<Token> ) -> Lexer
     {
@@ -46,7 +46,7 @@ impl Lexer
 
         let lexer = Lexer::new(tokens);
 
-        return lexer;
+        lexer
     }
 
     fn parse_tokens(text: &str) -> Vec<Token>
@@ -55,23 +55,23 @@ impl Lexer
         let mut started = false;
         let mut start = 0;
         for (i, c) in text.char_indices() {
-            if (c.is_whitespace() && !started)
+            if c.is_whitespace() && !started
             {
                 continue;
             }
 
-            if (!c.is_whitespace() && !started)
+            if !c.is_whitespace() && !started
             {
                 start = i;
                 started = true;
             }
 
-            if (c.is_whitespace() && started)
+            if c.is_whitespace() && started
             {
                 let t = &text[start..i];
                 let token = Self::parse_token(t);
                 //tokens.push(token);
-                tokens.push(crate::lexer::Token {
+                tokens.push(Token {
                     identifier : token,
                     value: t.to_string()
                 });
@@ -80,12 +80,16 @@ impl Lexer
 
         }
         let result = tokens;
-        return result;
+        result
     }
 
     fn parse_token(text: &str) -> Identifier
     {
-        if (text == "SELECT")
+        //TODO: think on where to store these consts
+        const SELECT : &str = "SELECT";
+
+
+        if text.eq_ignore_ascii_case(SELECT)
         {
             return Identifier::Select
         }
