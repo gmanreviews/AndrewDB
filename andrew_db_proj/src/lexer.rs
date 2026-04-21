@@ -1,8 +1,4 @@
-﻿
-
-//use crate::lexer::Identifier::{Select, Unknown};
-
-enum Identifier
+﻿enum Identifier
 {
     Select,
     Unknown
@@ -21,14 +17,6 @@ pub struct Lexer
 
 impl Lexer
 {
-    /*
-    pub fn new() -> Lexer
-    {
-        //to figure this out one day
-        Lexer { tokens: vec![] }
-    }
-    */
-
 
     pub fn new(t: Vec<Token> ) -> Lexer
     {
@@ -70,31 +58,40 @@ impl Lexer
             {
                 let t = &text[start..i];
                 let token = Self::parse_token(t);
-                //tokens.push(token);
-                tokens.push(Token {
-                    identifier : token,
-                    value: t.to_string()
-                });
+                tokens.push(token);
                 started = false;
             }
 
         }
+
+        if start > 0 && started
+        {
+            let t = &text[start..];
+            let token = Self::parse_token(t);
+            //tokens.push(token);
+            tokens.push(token);
+        }
+
         let result = tokens;
         result
     }
 
-    fn parse_token(text: &str) -> Identifier
+    fn parse_token(text: &str) -> Token
     {
         //TODO: think on where to store these consts
         const SELECT : &str = "SELECT";
-
-
+        let mut identifier = Identifier::Unknown;
         if text.eq_ignore_ascii_case(SELECT)
         {
-            return Identifier::Select
+            identifier =  Identifier::Select
         }
 
-        Identifier::Unknown
+        let i = identifier;
+
+        Token {
+            identifier : i,
+            value: text.to_string()
+        }
     }
 
 
